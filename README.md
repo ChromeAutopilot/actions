@@ -22,6 +22,7 @@ import * as sdk from 'https://chromeo.ai/chromeo-sdk-1.0.0.js'
 - [`getExtensionInfo`](#getExtensionInfo)
 - [`navigateToUrl`](#navigateToUrl)
 - [`openNewTab`](#openNewTab)
+- [`runMacro`](#runMacro)
 
 ### Text
 - [`pressKey`](#pressKey)
@@ -31,6 +32,38 @@ import * as sdk from 'https://chromeo.ai/chromeo-sdk-1.0.0.js'
 ### Data
 - [`fetch`](#fetch)
 - [`inferData`](#inferData)
+
+# Example
+
+```js
+import { 
+  openNewTab,
+  click,
+  clickIfExists,
+  elementExists,
+  end,
+} from 'https://chromeo.ai/chromeo-sdk-1.0.0.js'
+
+export const extensionVersion = '0.0.6'
+export const title = 'Watch a Movie on Netflix'
+export const description = "We'll surprise you with a movie we think you'll like"
+export const banner = 'netflix.com'
+export const button = '🎬 Watch movie'
+
+export default async function () {
+  await openNewTab("https://www.netflix.com/browse")
+  const isLoggedOut = await elementExists('button.login-button')
+  if (isLoggedOut) await click('button.login-button')
+  const isProfileGate = await elementExists('h1.profile-gate-label')
+  if (isProfileGate) await click('a.profile-link')
+  await click('a', 'Movies')
+  await click('.title-card')
+  await clickIfExists('button', 'Play')
+  await clickIfExists('button', 'Resume')
+  await click('button[aria-label="Full screen"]')
+  await end()
+}
+```
 
 # Methods
 
@@ -56,7 +89,7 @@ Clicks an element. If the element does not yet exist, it waits for the element t
 
 ```js
 // Wait for `button` element containing the text 'log in' to appear, then click it
-await click('button', 'Log in')
+await click('#login button', 'Log in')
 ```
 
 <a name="clickIfExists"></a>
@@ -69,7 +102,7 @@ Attempts to click an element. If the element does not exist, it returns (does no
 
 ```js
 // Immediately try clicking `button` element containing the text 'log in', otherwise proceed gracefully
-await clickIfExists('button', 'Log in')
+await clickIfExists('#login button', 'Log in')
 ```
 
 <a name="elementExists"></a>
@@ -97,7 +130,7 @@ Gets a copy of the active tab's DOM. It's a snapshot of the current tab's `docum
 
 ```js
 const dom = await getDOMSnapshot()
-await dom.querySelector('button').click()
+await dom.querySelector('#login button').click()
 ```
 
 <a name="waitForElement"></a>
@@ -109,7 +142,7 @@ Waits for a specific element to exist in the active tab's HTML.
 - `textContent` *(optional)* - Text content that must appear within the element's node or its descendants.
 
 ```js
-await waitForElement('#login-button')
+await waitForElement('#login button')
 ```
 
 <a name="fetch"></a>
@@ -117,7 +150,7 @@ await waitForElement('#login-button')
 ## fetch( url, options )
 
 Performs a `fetch` request in the context of the active tab
-- `url` {String} - The absolute URL (or URL path relative to the active tab's origin) .
+- `url` {String} - The absolute URL (or relative URL path of the active tab) .
 - `options` {Object} *(optional)* - Standard `fetch` options with keys such as `method`, `headers`, `body`, etc. If the `body` provided is an Object, it will be automatically stringified.
 
 **Returns**: {Object} the standard `fetch` response object with the following additional fields for convenience: `body` and `request`
@@ -134,7 +167,7 @@ console.log(response) // { body: { ... }, status: 201, ... }
 
 ## getExtensionInfo()
 
-Retrieves information about the Chromeo AI browser extension.
+Retrieves information about the Chromeo AI browser extension the user currently has installed.
 
 **Returns**: {Object}
 
@@ -167,6 +200,20 @@ Opens a new browser tab with the specified URL.
 
 ```js
 await openNewTab('https://example.com')
+```
+
+<a name="runMacro"></a>
+
+## runMacro( id, [inputText] )
+
+Imports and runs the specified macro with optional instructions. You can run a macro within another macro.
+- `id` {String} - The id of the macro (the filename without .js extension). The list of macros is [here](https://github.com/chromeoai/macros).
+- `inputText` {String} - Natural language instructions for the macro. Use [`inferData`](#inferData) to extract structured data from the inputText.
+
+**Returns**: {any} the macro can return any value upon completion
+
+```js
+await runMacro('sendVenmoPayment', 'please send $5 to @will123195 for coffee')
 ```
 
 <a name="inferData"></a>
@@ -228,71 +275,27 @@ await typeText('apple vision pro')
 await pressKey('Enter')
 ```
 
+# Launch a macro from your website
 
-## Example Macro
+## React App (COMING SOON)
 
 ```js
-import {
-  openNewTab,
-  click,
-  elementExists,
-  end,
-} from 'https://chromeo.ai/chromeo-sdk-1.0.0.js'
+import { launchMacro } from 'chromeoai'
 
-export const extensionVersion = '0.0.5'
-
-export default async function watchMovieOnNetflix() {
-  await openNewTab("https://www.netflix.com/browse")
-  const isLoggedOut = await elementExists('button.login-button')
-  if (isLoggedOut) await click('button.login-button')
-  const isChooseProfile = await elementExists('h1.profile-gate-label')
-  if (isChooseProfile) await click('a.profile-link')
-  await click('a', 'Movies')
-  await click('div.ptrack-content > a')
-  await Promise.any([
-    click('button', 'Play'),
-    click('button', 'Resume'),
-  ])
-  await click('button[aria-label="Full screen"]')
-  await end()
-}
+const BuyMeACoffee = () => (
+  <button onClick={() => (
+    launchMacro('sendVenmoPayment', '$5 to @will123195 for coffee')
+  )}>Buy me a coffee</button>
+)
 ```
 
-## Example Integration to Third-party React App (COMING SOON)
+## Vanilla JavaScript (COMING SOON)
 
 ```js
-import { useChromeoSDK, runMacro } from 'chromeoai'
+import { launchMacro } from 'https://chromeo.ai/chromeo-sdk-1.0.0.js'
 
-const MyComponent = () => {
-  const { runMacro } = useChromeoSDK()
-  const onClick = () => runMacro('sendVenmoPayment', '$5 to @will123195 for coffee')
-  return (
-    <button onClick={onClick}>Send me $5</button>
-  )
-}
-```
-
-## Example Integration to Third-party Website (COMING SOON)
-
-```js
 async function () {
-  const { launchMacro } = import('https://chromeo.ai/chromeo-sdk-1.0.0.js')
-  document.querySelector('button').addEventListener('click', () => {
-    // this will confirm with the user, then run the macro
-    return runMacro('sendVenmoPayment', '$5 to @will123195 for coffee')
-  }, false)
+  const { launchMacro } = await import('https://chromeo.ai/chromeo-sdk-1.0.0.js')
+  const result = await launchMacro('sendVenmoPayment', '$5 to @will123195 for coffee')
 }
-```
-
-## Example API Integration (COMING SOON)
-
-```js
-import axios from 'axios'
-
-// the user's oauth token must be provided
-// this will add this job to the user's inbox, the user will confirm/decline
-await axios.post('https://chromeo.ai/v1/run-macro', {
-  id: 'sendVenmoPayment',
-  input: '$5 to @will123195 for coffee'
-})
 ```
