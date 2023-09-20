@@ -19,6 +19,7 @@ let sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 export default async function (input) {
   const year = new Date().getFullYear()
   const inputText = input || await prompt('What month and gross sales amount?')
+  if (!inputText.trim()) return 
   const data = await inferData({
     date: `The last day of the specified month in MM/DD/YYYY format, assuming ${year} year if unspecified`,
     grossSales: 'The numeric dollar amount of gross sales for the specified month',

@@ -23,7 +23,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 export default async function (input) {
   const text = input || await prompt("Send how much to whom and for what?")
-  if (!text.trim()) return 
+  if (!text.trim()) return
   const data = await inferData({
     recipientName: 'The name of the recipient',
     recipientEmail: 'The email address of the recipient',
