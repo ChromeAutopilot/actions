@@ -29,7 +29,7 @@ export default async function (inputText) {
   const data = await inferData({
     recipient: 'The email address or recipient in this format: "name" <email address>',
     subject: 'An appropriate subject line for the email',
-    body: 'A casual yet professional email body serving the specified purpose, leave blank if unsure',
+    body: 'A casual yet professional email body serving the specified purpose, leave blank if unsure. No placeholders, i.e. please impute the correct salutaion given the information available.',
     sender: `The sender of the email, defaults to ${defaultSender}`
   }, inputText)
   await typeText(data.recipient)
