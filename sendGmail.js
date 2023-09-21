@@ -26,12 +26,14 @@ export default async function (inputText) {
   const fromLabel = dom.getElementByText('form tr label', 'From')
   const defaultSender = fromLabel.closest('tr').querySelector('td:nth-child(2)').innerText
   // TODO: have a thinking character animation (text based spinner)
-  const data = await inferData({
+  const fields = {
     recipient: 'The email address or recipient in this format: "name" <email address>',
     subject: 'An appropriate subject line for the email',
-    body: 'A casual yet professional email body serving the specified purpose, leave blank if unsure. No placeholders, i.e. please impute the correct salutaion given the information available.',
-    sender: `The sender of the email, defaults to ${defaultSender}`
-  }, inputText)
+    sender: `The sender of the email, defaults to ${defaultSender}`,
+    body: "A casual yet professional email body serving the specified purpose, leave blank if unsure. Do not use placeholders like '[Your name]'. Use the sender's actual name in the complementary close. If unknown, then simply omit the complementary close. Append 'Sent by Chromeo.ai on behalf of <sender>' to the end of the email body.",
+  }
+  console.log(fields, inputText)
+  const data = await inferData(fields, inputText)
   await typeText(data.recipient)
   await pressKey('Enter')
   await click('input[aria-label="Subject"]')
