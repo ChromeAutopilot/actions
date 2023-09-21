@@ -19,7 +19,7 @@ export const inputPrompt = 'Enter recipient and purpose of email'
 
 export default async function (inputText) {
   inputText = inputText || prompt(inputPrompt)
-  if (!inputText) return end()
+  if (!inputText) return 
   await openNewTab('https://gmail.com')
   await click('div', 'Compose')
   const dom = await getDOMSnapshot()
