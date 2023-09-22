@@ -21,7 +21,7 @@ export default async function (inputText) {
   inputText = inputText || prompt(inputPrompt)
   if (!inputText) return 
   await openNewTab('https://gmail.com')
-  await click('div', 'Compose')
+  await click('div[role="button"]', 'Compose')
   const dom = await getDOMSnapshot()
   const fromLabel = dom.getElementByText('form tr label', 'From')
   const defaultSender = fromLabel.closest('tr').querySelector('td:nth-child(2)').innerText
