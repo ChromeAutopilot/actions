@@ -5,6 +5,9 @@ import {
 } from 'https://chromeo.ai/chromeo-sdk-1.0.0.js'
 
 export const extensionVersion = '0.0.5'
+export const name = 'Order DoorDash'
+export const description = 'Order food from DoorDash'
+export const domains = ['doordash.com']
 
 export default async function () {
   await openNewTab("https://www.doordash.com/orders")

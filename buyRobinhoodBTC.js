@@ -10,9 +10,9 @@ import {
 
 export const extensionVersion = '0.0.5'
 
-export const title = 'Buy Bitcoin on Robinhood'
+export const name = 'Buy Bitcoin on Robinhood'
 export const description = 'DCA with a single click. Buy $10 of BTC on Robinhood.'
-export const banner = 'Robinhood'
+export const domains = ['robinhood.com']
 export const button = '📈 Stack Sats'
 
 const BTCURL = "https://robinhood.com/crypto/BTC"

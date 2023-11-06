@@ -9,9 +9,9 @@ import {
 } from 'https://chromeo.ai/chromeo-sdk-1.0.0.js'
 
 export const extensionVersion = '0.0.7'
-export const title = 'Send Gmail'
+export const name = 'Send Gmail'
 export const description = 'Send an AI generated email'
-export const banner = 'Gmail'
+export const domains = ['gmail.com']
 export const button = '📧 Send Email'
 export const inputPrompt = 'Enter recipient and purpose of email'
 

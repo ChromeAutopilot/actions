@@ -13,9 +13,9 @@ import {
 
 export const extensionVersion = '0.0.5'
 
-export const title = 'Send Venmo Payment'
+export const name = 'Send Venmo Payment'
 export const description = "Send money easily by saying who and how much (and we'll mark it private)"
-export const banner = 'venmo.com'
+export const domains = ['venmo.com']
 export const inputPrompt = 'Send how much to whom and for what?'
 export const button = '💰 Send Money'
 
