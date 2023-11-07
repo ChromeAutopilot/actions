@@ -1,5 +1,6 @@
 import { 
   openNewTab,
+  closeTab,
   click,
   pressKey,
   end,
@@ -15,8 +16,6 @@ export const domains = ['gmail.com']
 export const button = '📧 Send Email'
 export const inputPrompt = 'Enter recipient and purpose of email'
 
-// send will@gadgetlabs.com an invoice for $1000 for 5 hours of consulting work on TopNug.com, format it like an itemized invoice.
-
 export default async function (inputText) {
   inputText = inputText || prompt(inputPrompt)
   if (!inputText) return 
@@ -29,8 +28,8 @@ export default async function (inputText) {
   const fields = {
     recipient: 'The email address or recipient in this format: "name" <email address>',
     subject: 'An appropriate subject line for the email',
-    sender: `The sender of the email, defaults to ${defaultSender}`,
-    body: "A casual yet professional email body serving the specified purpose, leave blank if unsure. Do not use placeholders like '[Your name]'. Use the sender's actual name in the complementary close. If unknown, then simply omit the complementary close. Append 'Sent by Chromeo.ai on behalf of <sender's name only>' to the end of the email body.",
+    sender: `The sender of the email [defaults to ${defaultSender}]`,
+    body: "A casual yet professional email body serving the specified purpose, leave blank if unsure. Do not use placeholders like '[Your name]'. Use the sender's actual name in the complementary close. If unknown, then simply omit the complementary close. Append 'Sent by ChromeAutopilot on behalf of <sender's name only>' to the end of the email body.",
   }
   console.log(fields, inputText)
   const data = await inferData(fields, inputText)
