@@ -8,7 +8,7 @@ import {
   getDOMSnapshot
 } from 'https://chromeo.ai/chromeo-sdk-1.0.0.js'
 
-export const extensionVersion = '0.0.7'
+export const extensionVersion = '0.0.13'
 export const name = 'Send Gmail'
 export const description = 'Send an AI generated email'
 export const domains = ['gmail.com']
@@ -41,5 +41,6 @@ export default async function (inputText) {
   await click('div[aria-label="Message Body"]')
   await typeText(data.body)
   await click('div[aria-label="Send"]')
+  await closeTab()
   await end()
 }
