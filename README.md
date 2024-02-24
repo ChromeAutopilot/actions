@@ -1,11 +1,11 @@
-# Chromeo.ai SDK API Reference
+# Chrome Autopilot SDK API Reference
 
-The Chromeo.ai SDK allows you to create an automation script (a "macro") that interacts with any website using the [Chromeo AI browser extension](https://chrome.google.com/webstore/detail/chromeo-ai/idahijhccencfhigphpmlnjbppldolgk).
+The Chrome Autopilot SDK allows you to create an automation script (an "Action") that interacts with any website using the [Chrome Autopilot browser extension](https://chrome.google.com/webstore/detail/chrome-autopilot/idahijhccencfhigphpmlnjbppldolgk).
 
 # Usage
 
 ```js
-import * as sdk from 'https://chromeo.ai/chromeo-sdk-1.0.0.js'
+import * as sdk from 'https://chromeautopilot.com/sdk-1.0.0.js'
 ```
 
 # API
@@ -19,12 +19,14 @@ import * as sdk from 'https://chromeo.ai/chromeo-sdk-1.0.0.js'
 - [`waitForElement`](#waitForElement)
 
 ### Browser
+- [`closeTab`](#closeTab)
 - [`getExtensionInfo`](#getExtensionInfo)
 - [`navigateToUrl`](#navigateToUrl)
 - [`openNewTab`](#openNewTab)
-- [`runMacro`](#runMacro)
+- [`runAction`](#runAction)
 
 ### Text
+- [`alert`](#alert)
 - [`pressKey`](#pressKey)
 - [`prompt`](#prompt)
 - [`typeText`](#typeText)
@@ -42,12 +44,11 @@ import {
   clickIfExists,
   elementExists,
   end,
-} from 'https://chromeo.ai/chromeo-sdk-1.0.0.js'
+} from 'https://chromeautopilot.com/sdk-1.0.0.js'
 
-export const extensionVersion = '0.0.6'
+export const extensionVersion = '0.0.12'
 export const title = 'Watch a Movie on Netflix'
 export const description = "We'll surprise you with a movie we think you'll like"
-export const banner = 'netflix.com'
 export const button = '🎬 Watch movie'
 
 export default async function () {
@@ -67,7 +68,7 @@ export default async function () {
 
 # Methods
 
-All methods are async (return a Promise).
+All methods are async.
 
 <a name="blurFocusedElement"></a>
 
@@ -126,6 +127,11 @@ const isLoggedIn = await elementExists('a', 'Log out')
 
 Gets a copy of the active tab's DOM. It's a snapshot of the current tab's `document` object, so if the HTML in the active tab changes, your DOM snapshot will be stale.
 
+There are helper methods available on each element:
+- getElementByText( elementType, [searchText] )
+- getElementsByText( elementType, [searchText] )
+- parent()
+
 **Returns**: a copy of the active tab's `document` DOM object
 
 ```js
@@ -145,29 +151,23 @@ Waits for a specific element to exist in the active tab's HTML.
 await waitForElement('#login button')
 ```
 
-<a name="fetch"></a>
+<a name="closeTab"></a>
 
-## fetch( url, options )
+## closeTab()
 
-Performs a `fetch` request in the context of the active tab
-- `url` {String} - The absolute URL (or relative URL path of the active tab) .
-- `options` {Object} *(optional)* - Standard `fetch` options with keys such as `method`, `headers`, `body`, etc. If the `body` provided is an Object, it will be automatically stringified.
+Closes the current tab.
 
-**Returns**: {Object} the standard `fetch` response object with the following additional fields for convenience: `body` and `request`
+**Returns**: when the tab is closed
 
 ```js
-const response = await fetch('/v1/something', {
-  method: 'POST',
-  body: { ... }
-})
-console.log(response) // { body: { ... }, status: 201, ... }
+await closeTab()
 ```
 
 <a name="getExtensionInfo"></a>
 
 ## getExtensionInfo()
 
-Retrieves information about the Chromeo AI browser extension the user currently has installed.
+Retrieves information about the Chrome Autopilot browser extension the user currently has installed.
 
 **Returns**: {Object}
 
@@ -202,18 +202,84 @@ Opens a new browser tab with the specified URL.
 await openNewTab('https://example.com')
 ```
 
-<a name="runMacro"></a>
+<a name="runAction"></a>
 
-## runMacro( id, [inputText] )
+## runAction( id, [inputText] )
 
-Imports and runs the specified macro with optional instructions. You can run a macro within another macro.
-- `id` {String} - The id of the macro (the filename without .js extension). The list of macros is [here](https://github.com/chromeoai/macros).
-- `inputText` {String} - Natural language instructions for the macro. Use [`inferData`](#inferData) to extract structured data from the inputText.
+Imports and runs the specified Action with optional instructions. You can run an Action within another Action.
+- `id` {String} - The id of the Action (the filename without .js extension). The list of Actions is [here](https://github.com/chromeautopilot/actions).
+- `inputText` {String} - Natural language instructions for the Action. Use [`inferData`](#inferData) to extract structured data from the inputText.
 
-**Returns**: {any} the macro can return any value upon completion
+**Returns**: {String} the Action may return a string value upon completion
 
 ```js
-await runMacro('sendVenmoPayment', 'please send $5 to @will123195 for coffee')
+await runAction('sendVenmoPayment', 'please send $5 to @will123195 for coffee')
+```
+
+<a name="alert"></a>
+
+## alert( message )
+
+Opens an alert dialog in the current tab. Consider using prompt() instead.
+
+**Returns**: when the alert is dismissed
+
+```js
+await alert('This message is displayed in the current tab')
+```
+
+<a name="pressKey"></a>
+
+## pressKey( keycode )
+
+Simulates pressing a specific key.
+- `keycode` {String|Integer} - JavaScript keycode, (see [keyCode reference](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode#printable_keys_in_standard_position)). Only the most common string keycodes are supported, but all numeric keycodes are supported.
+
+```js
+await pressKey('Enter')
+```
+
+<a name="prompt"></a>
+
+## prompt( message, [defaultValue] )
+
+Opens a dialog in the current tab prompting the user for text input.
+
+**Returns**: {String} user inputted text
+
+```js
+await prompt('What is your budget?', '$100)
+```
+
+<a name="typeText"></a>
+
+## typeText(text)
+
+Types a string of characters (into the currently focused input element)
+- `text` {String} - The text to type.
+
+```js
+await click('*[type=search]')
+await typeText('apple vision pro')
+await pressKey('Enter')
+```
+
+<a name="fetch"></a>
+
+## fetch( url, options )
+
+Performs a `fetch` request in the context of the active tab
+- `url` {String} - The absolute URL (or relative URL path of the active tab) .
+- `options` {Object} *(optional)* - Standard `fetch` options with keys such as `method`, `headers`, `body`, etc. If the `body` provided is an Object, it will be automatically stringified.
+
+**Returns**: {Object} the standard `fetch` response object with the following additional fields for convenience: `body` and `request`
+
+```js
+const response = await fetch('/v1/something', {
+  method: 'POST',
+  body: { ... }
+})
+console.log(response) // { body: { ... }, status: 201, ... }
 ```
 
 <a name="inferData"></a>
@@ -236,55 +302,16 @@ const data = await inferData({
 console.log(data) // { name: 'John', age: 24, email: null }
 ```
 
-<a name="pressKey"></a>
-
-## pressKey( keycode )
-
-Simulates pressing a specific key.
-- `keycode` {String|Integer} - JavaScript keycode, (see [keyCode reference](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode#printable_keys_in_standard_position)). Only the most common string keycodes are supported, but all numeric keycodes are supported.
-
-```js
-await pressKey('Enter')
-```
-
-<a name="prompt"></a>
-
-## prompt( message )
-
-Displays a text input prompt to the user.
-- `message` {String} - The message to display to the user above the input box
-
-**Returns**: {String} the user's input text
-
-```js
-const inputText = await prompt('What is your favorite color?'); // "rich mahogany"
-const { hex } = await inferData({ hex: 'The hex color code' }, inputText)
-console.log(hex) // #88421D
-```
-
-<a name="typeText"></a>
-
-## typeText(text)
-
-Types a string of characters (into the currently focused input element)
-- `text` {String} - The text to type.
-
-```js
-await click('*[type=search]')
-await typeText('apple vision pro')
-await pressKey('Enter')
-```
-
-# Launch a macro from your website
+# Launch an Action from your website
 
 ## React App (COMING SOON)
 
 ```js
-import { launchMacro } from 'chromeoai'
+import { launchAction } from 'chromeautopilot'
 
 const BuyMeACoffee = () => (
   <button onClick={() => (
-    launchMacro('sendVenmoPayment', '$5 to @will123195 for coffee')
+    launchAction('sendVenmoPayment', '$5 to @will123195 for coffee')
   )}>Buy me a coffee</button>
 )
 ```
@@ -292,10 +319,10 @@ const BuyMeACoffee = () => (
 ## Vanilla JavaScript (COMING SOON)
 
 ```js
-import { launchMacro } from 'https://chromeo.ai/chromeo-sdk-1.0.0.js'
+import { launchAction } from 'https://chromeautopilot.com/sdk-1.0.0.js'
 
 async function () {
-  const { launchMacro } = await import('https://chromeo.ai/chromeo-sdk-1.0.0.js')
-  const result = await launchMacro('sendVenmoPayment', '$5 to @will123195 for coffee')
+  const { launchAction } = await import('https://chromeautopilot.com/sdk-1.0.0.js')
+  const result = await launchAction('sendVenmoPayment', '$5 to @will123195 for coffee')
 }
 ```

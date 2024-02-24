@@ -8,14 +8,13 @@ import {
   elementExists,
   end,
   clickIfExists,
-} from 'https://chromeo.ai/chromeo-sdk-1.0.0.js'
-// } from 'http://localhost:3001/chromeo-sdk-1.0.0.js'
+} from 'https://chromeautopilot.com/sdk-1.0.0.js'
+// } from 'http://localhost:3001/sdk-1.0.0.js'
 
 export const extensionVersion = '0.0.5'
 
 export const name = 'Send Venmo Payment'
 export const description = "Send money easily by saying who and how much (and we'll mark it private)"
-export const domains = ['venmo.com']
 export const inputPrompt = 'Send how much to whom and for what?'
 export const button = '💰 Send Money'
 
@@ -32,7 +31,7 @@ export default async function (input) {
     memo: 'The reason for the payment',
   }, text)
   data.recipient = data.recipientUsername || data.recipientEmail || data.recipientName
-  data.memo = data.memo || `Sent from Chromeo.ai`
+  data.memo = data.memo || `Sent from Chrome Autopilot`
   await openNewTab("https://account.venmo.com/pay")
   await clickIfExists("button[name='Next']")
   await clickIfExists("button[name='Sign in']")

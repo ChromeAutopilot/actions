@@ -3,7 +3,7 @@ import {
   inferData,
   openNewTab,
   typeText,
-} from 'https://chromeo.ai/chromeo-sdk-1.0.0.js'
+} from 'https://chromeautopilot.com/sdk-1.0.0.js'
 
 export const extensionVersion = '0.0.5'
 

@@ -7,7 +7,7 @@ import {
   typeText,
   inferData,
   getDOMSnapshot
-} from 'https://chromeo.ai/chromeo-sdk-1.0.0.js'
+} from 'https://chromeautopilot.com/sdk-1.0.0.js'
 
 export const extensionVersion = '0.0.13'
 export const name = 'Send Gmail'
@@ -16,7 +16,7 @@ export const domains = ['gmail.com']
 export const button = '📧 Send Email'
 export const inputPrompt = 'Enter recipient and purpose of email'
 
-export default async function (inputText) {
+export default async function sendGmail(inputText) {
   inputText = inputText || prompt(inputPrompt)
   if (!inputText) return 
   await openNewTab('https://gmail.com')
@@ -29,10 +29,10 @@ export default async function (inputText) {
     recipient: 'The email address or recipient in this format: "name" <email address>',
     subject: 'An appropriate subject line for the email',
     sender: `The sender of the email [defaults to ${defaultSender}]`,
-    body: "A casual yet professional email body serving the specified purpose, leave blank if unsure. Do not use placeholders like '[Your name]'. Use the sender's actual name in the complementary close. If unknown, then simply omit the complementary close. Append 'Sent by ChromeAutopilot on behalf of <sender's name only>' to the end of the email body.",
+    body: "A casual yet professional email body serving the specified purpose, leave blank if unsure. DO NOT use placeholders like '[Your name]'. Use the sender's actual name in the complementary close. If unknown, then simply omit the complementary close. Append 'Sent from Chrome Autopilot' to the end of the email body.",
   }
-  console.log(fields, inputText)
   const data = await inferData(fields, inputText)
+  // TODO: find a contact instead of just typing the email address
   await typeText(data.recipient)
   await pressKey('Enter')
   await click('input[aria-label="Subject"]')

@@ -4,7 +4,7 @@ import {
   clickIfExists,
   elementExists,
   end,
-} from 'https://chromeo.ai/chromeo-sdk-1.0.0.js'
+} from 'https://chromeautopilot.com/sdk-1.0.0.js'
 
 export const extensionVersion = '0.0.6'
 export const name = 'Watch a Movie on Netflix'
