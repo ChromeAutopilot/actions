@@ -10,14 +10,18 @@ import {
   getDOMSnapshot,
   sendMessageToUser,
   deduce,
+  closeTab,
 // } from 'http://localhost:3000/sdk-1.0.0.js'
 } from 'https://chromeautopilot.com/sdk-1.0.0.js'
 
-export const extensionVersion = '0.0.14'
+export const extensionVersion = '0.0.16'
 export const name = 'Robinhood Assistant'
 export const assistantId = 'RobinhoodAssistant'
 export const description = 'Executes trades for you on the Robinhood website.'
 export const inputPrompt = `Tell me your stock or crypto trade(s) and I'll open Robinhood and execute it for you.`
+export const banner = 'robinhood.com'
+export const button = 'Chat'
+export const isAssistant = true
 
 export default async function (messages) {
   const actionResponse = await deduce({
@@ -39,6 +43,7 @@ export default async function (messages) {
   })
   console.log('actionResponse', actionResponse)
   // get key from actionResponse
+  if (actionResponse.error) return sendMessageToUser(actionResponse.error, assistantId)
   const key = actionResponse.action
   switch (key) {
     case 'executeTrades': return executeTrades(messages)
@@ -52,7 +57,7 @@ export default async function (messages) {
     case 'getAssetData': return getAssetData(messages)
     default: 
       console.log('no action identified', actionResponse)
-      return sendMessageToUser(actionResponse[key], assistantId)
+      return sendMessageToUser(actionResponse[0], assistantId)
   }
 }
 
@@ -136,11 +141,14 @@ async function executeTrades(messages) {
       to increase or decrease the current allocation to the requested allocation.
       
       Please explain any calculation logic in the "notes" field.
+
+      Errors should be generated when applicable, a few examples are below.
     `,
     JSONOutputExamples: [
       {trades: ['Sell 0.15 shares of AAPL','Buy $25 of BTC']},
       {notes: 'user asked for 15% allocation. 15% of total portfolio value is $10', trades: ['Buy $10 of TSLA']},
-      {error: 'You do not have a sufficient DOGE balance to execute this trade.'},
+      {error: 'My knowledge and abilities are limited to executing trades on the Robinhood website.'},
+      {error: '<Reason why trade is not possible>'},
     ],
     messages
   })
@@ -185,10 +193,8 @@ async function executeTrades(messages) {
     }
     await getOntoThePage()
     await enterOrder(trade, data)
+    await closeTab()
   })
-
-  await closeTab()
-  await end()
   await sendMessageToUser('Done!', assistantId)
 }
 

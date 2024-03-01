@@ -31,5 +31,4 @@ export default async function sendFlowers(inputText) {
   await click('button', 'Add to Cart')
   await click('button', 'Checkout')
   await typeText('John Doe')
-  await typeText('
 }
