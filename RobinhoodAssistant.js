@@ -227,7 +227,7 @@ async function chooseUnit({ assetCategory, orderType, amountUSD, quantity, ticke
 
 async function enterOrder(inputText, data) {
   const { amountUSD, orderType, quantity, sellEntirePosition, tickerSymbol, assetCategory } = data
-  await click('form a', `${orderType}`)
+  await click('form [role=button]', `${orderType}`)
   if (data.limitPrice) {
     // TODO: implement limit orders
     return window.alert('Sorry I cannot handle limit orders yet.')
