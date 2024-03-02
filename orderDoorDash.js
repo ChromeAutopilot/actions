@@ -5,6 +5,7 @@ import {
 } from 'https://chromeautopilot.com/sdk-1.0.0.js'
 
 export const extensionVersion = '0.0.5'
+export const id = 'orderDoorDash'
 export const name = 'Order DoorDash'
 export const description = 'Order food from DoorDash'
 export const domains = ['doordash.com']

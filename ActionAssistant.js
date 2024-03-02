@@ -12,6 +12,12 @@ export const button = 'Chat'
 export const isAssistant = true
 
 export default async function ActionAssistant(messages, action) {
+  const { default: runAction } = action
+  if (!action.inputPrompt) {
+    const result = await runAction()
+    if (result) return sendMessageToUser(result, action.id)
+    else return sendMessageToUser('Done!', action.id)
+  }
   const response = await deduce({
     taskedWithIdentifying: `the inputText param to call the function ${action.name}( inputText )`,
     contextualInformation: `
@@ -39,6 +45,6 @@ export default async function ActionAssistant(messages, action) {
     messages
   })
   if (response.chatResponse) return sendMessageToUser(response.chatResponse, action.id)
-  const { default: runAction } = action
-  await runAction(response.inputText)
+  const result = await runAction(response.inputText)
+  if (result) return sendMessageToUser(result, action.id)
 }

@@ -7,6 +7,7 @@ import {
 } from 'https://chromeautopilot.com/sdk-1.0.0.js'
 
 export const extensionVersion = '0.0.6'
+export const id = 'watchMovieNetflix'
 export const name = 'Watch a Movie on Netflix'
 export const description = "We'll surprise you with a movie we think you'll like"
 export const domains = ['netflix.com']

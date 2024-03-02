@@ -12,7 +12,7 @@ import {
 // } from 'http://localhost:3001/sdk-1.0.0.js'
 
 export const extensionVersion = '0.0.5'
-
+export const id = 'sendVenmoPayment'
 export const name = 'Send Venmo Payment'
 export const description = "Send money easily by saying who and how much (and we'll mark it private)"
 export const inputPrompt = 'Send how much to whom and for what?'

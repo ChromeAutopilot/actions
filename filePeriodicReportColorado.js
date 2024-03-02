@@ -10,6 +10,7 @@ import {
 } from 'https://chromeautopilot.com/sdk-1.0.0.js'
 
 export const extensionVersion = '0.0.14'
+export const id = 'filePeriodicReportColorado'
 export const name = 'File Periodic Report in Colorado'
 export const description = 'Automate filing your annual periodic report to keep your Colorado business in Good Standing'
 export const domains = ['coloradosos.gov']

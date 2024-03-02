@@ -12,6 +12,7 @@ import {
 import { inferData } from '../website/web/public/sdk-1.0.0'
 
 export const extensionVersion = '0.0.13'
+export const id = 'sendFlowers'
 export const name = 'Send Flowers'
 export const description = 'Send flowers to someone special'
 export const domains = ['bouqs.com']

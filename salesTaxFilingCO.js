@@ -13,6 +13,7 @@ import {
 } from 'https://chromeautopilot.com/sdk-1.0.0.js'
   
 export const extensionVersion = '0.0.5'
+export const id = 'salesTaxFilingCO'
 
 let sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 

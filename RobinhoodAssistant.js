@@ -16,12 +16,14 @@ import {
 
 export const extensionVersion = '0.0.16'
 export const name = 'Robinhood Assistant'
-export const assistantId = 'RobinhoodAssistant'
+export const id = 'RobinhoodAssistant'
 export const description = 'Executes trades for you on the Robinhood website.'
 export const inputPrompt = `Tell me your stock or crypto trade(s) and I'll open Robinhood and execute it for you.`
 export const banner = 'robinhood.com'
 export const button = 'Chat'
 export const isAssistant = true
+
+const assistantId = id
 
 export default async function (messages) {
   const actionResponse = await deduce({

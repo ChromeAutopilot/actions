@@ -10,6 +10,7 @@ import {
 } from 'https://chromeautopilot.com/sdk-1.0.0.js'
 
 export const extensionVersion = '0.0.13'
+export const id = 'sendGmail'
 export const name = 'Send Gmail'
 export const description = 'Send an AI generated email'
 export const domains = ['gmail.com']

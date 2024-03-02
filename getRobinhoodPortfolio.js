@@ -9,6 +9,7 @@ import {
 } from 'https://chromeautopilot.com/sdk-1.0.0.js'
 
 export const extensionVersion = '0.0.14'
+export const id = 'getRobinhoodPortfolio'
 export const name = 'Get Robinhood Portfolio'
 export const description = 'Get the data from your Robinhood portfolio'
 

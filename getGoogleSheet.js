@@ -4,6 +4,7 @@ import {
 } from 'https://chromeautopilot.com/sdk-1.0.0.js'
 
 export const extensionVersion = '0.0.13'
+export const id = 'getGoogleSheet'
 export const name = 'Get Google Sheet'
 export const description = 'Get the data from a Google Sheet'
 export const inputPrompt = 'Enter the name or ID of the Google Sheet'
