@@ -63,10 +63,10 @@ export default async function locateItemInHomeDepot(inputText) {
     const isNearby = await elementExists('[data-automation-id="pickupNearByQty"]')
     if (!isNearby) {
       await closeTab()
-      return sendMessageToUser(`"${itemName}" is the top result, but it's not in stock at the ${store} store.`, id)
+      return `"${itemName}" is the top result, but it's not in stock at the ${store} store.`
     }
     await closeTab()
-    return sendMessageToUser(`"${itemName}" is the top result, but it's not in stock at the ${store} store. However, it is in stock nearby.`, id)
+    return `"${itemName}" is the top result, but it's not in stock at the ${store} store. However, it is in stock nearby.`
     // TODO: 
     await click('[data-automation-id="pickupNearByQty"]')
     await sleep(150)
@@ -91,7 +91,7 @@ export default async function locateItemInHomeDepot(inputText) {
   }  
   const itemLocation = dom.getElementByText('span', 'Aisle').innerText
   await closeTab()
-  return sendMessageToUser(`I found "${itemName}" in stock at the ${store} store:\n\n**${itemLocation}**`, id)
+  return `I found "${itemName}" in stock at the ${store} store:\n\n**${itemLocation}**`
   // return end()
 }
 

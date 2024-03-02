@@ -52,6 +52,7 @@ async function scrapePortfolio(attempt = 1) {
     await closeTab()
     const value = `
 ## Your Portfolio
+### as of ${new Date().toLocaleDateString()}
 - Total value: $${totalValue}
 - Available cash: ${cash}
 
