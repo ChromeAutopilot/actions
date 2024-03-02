@@ -30,7 +30,7 @@ export default async function locateItemInHomeDepot(inputText) {
   console.log('data', data)
   let hdLocation = data.homeDepotLocation
   if (!hdLocation) {
-    return sendMessageToUser('Which Home Depot store?', id)
+    return 'Which Home Depot store?'
   }
   // if (!product) {
   //   product = await prompt('What item?')
