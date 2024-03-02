@@ -7,7 +7,6 @@ export const extensionVersion = '0.0.16'
 export const name = 'Chrome Autopilot Assistant'
 export const assistantId = 'ActionAssistant'
 export const description = 'Executes actions for you.'
-// export const inputPrompt = `Tell me your stock or crypto trade(s) and I'll open Robinhood and execute it for you.`
 export const banner = 'chromeautopilot.com'
 export const button = 'Chat'
 export const isAssistant = true
@@ -20,12 +19,15 @@ export default async function ActionAssistant(messages, action) {
       
       ${action.inputPrompt}
       
-      Please synthesize the conversation with the user and identify the inputText that 
+      Please synthesize the user's most recent message to identify the inputText that 
       satisfies the inputPrompt so the function is able to return the desired output for
       the user.
 
+      Refer to previous messages to fill in any gaps.
+
       If it appears the user is chatting about something irrelevant to the input prompt, 
-      then please cordially guide the user back to the input prompt with a chatResponse.
+      then please cordially guide the user back to the input prompt and/or ask for 
+      clarification with a chatResponse.
     `,
     JSONOutputExamples: [
       {inputText: 'highlands ranch, cardboard boxes'},
