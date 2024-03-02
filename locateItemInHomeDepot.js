@@ -15,7 +15,7 @@ import {
 // } from 'http://localhost:3000/sdk-1.0.0.js'
 
 export const extensionVersion = '0.0.16'
-const actionId = 'locateItemInHomeDepot'
+export const id = 'locateItemInHomeDepot'
 export const name = 'Locate Item in Home Depot'
 export const description = 'Find the aisle and bay of a product in your local Home Depot'
 export const domains = ['homedepot.com']
@@ -30,7 +30,7 @@ export default async function locateItemInHomeDepot(inputText) {
   console.log('data', data)
   let hdLocation = data.homeDepotLocation
   if (!hdLocation) {
-    return sendMessageToUser('Which Home Depot store?', actionId)
+    return sendMessageToUser('Which Home Depot store?', id)
   }
   // if (!product) {
   //   product = await prompt('What item?')
@@ -63,10 +63,10 @@ export default async function locateItemInHomeDepot(inputText) {
     const isNearby = await elementExists('[data-automation-id="pickupNearByQty"]')
     if (!isNearby) {
       await closeTab()
-      return sendMessageToUser(`"${itemName}" is the top result, but it's not in stock at the ${store} store.`, actionId)
+      return sendMessageToUser(`"${itemName}" is the top result, but it's not in stock at the ${store} store.`, id)
     }
     await closeTab()
-    return sendMessageToUser(`"${itemName}" is the top result, but it's not in stock at the ${store} store. However, it is in stock nearby.`, actionId)
+    return sendMessageToUser(`"${itemName}" is the top result, but it's not in stock at the ${store} store. However, it is in stock nearby.`, id)
     // TODO: 
     await click('[data-automation-id="pickupNearByQty"]')
     await sleep(150)
@@ -87,11 +87,11 @@ export default async function locateItemInHomeDepot(inputText) {
     await navigateTo(url)
     dom = await getDOMSnapshot()
     const itemLocation = dom.getElementByText('span', 'Aisle').innerText
-    return sendMessageToUser(`"${itemName}" is not in stock at ${store}, but it is in stock at ${nearbyStoreName}:\n\n**${itemLocation}**`, actionId)
+    return sendMessageToUser(`"${itemName}" is not in stock at ${store}, but it is in stock at ${nearbyStoreName}:\n\n**${itemLocation}**`, id)
   }  
   const itemLocation = dom.getElementByText('span', 'Aisle').innerText
   await closeTab()
-  return sendMessageToUser(`I found "${itemName}" in stock at the ${store} store:\n\n**${itemLocation}**`, actionId)
+  return sendMessageToUser(`I found "${itemName}" in stock at the ${store} store:\n\n**${itemLocation}**`, id)
   // return end()
 }
 

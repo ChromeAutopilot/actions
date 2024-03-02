@@ -1,16 +1,6 @@
 import {
-  openNewTab,
-  typeText,
-  elementExists,
-  waitForElement,
-  click,
-  end,
-  prompt,
-  inferData,
-  getDOMSnapshot,
-  sendMessageToUser,
   deduce,
-  closeTab,
+  sendMessageToUser
 } from 'https://chromeautopilot.com/sdk-1.0.0.js'
 
 export const extensionVersion = '0.0.16'
@@ -33,15 +23,20 @@ export default async function ActionAssistant(messages, action) {
       Please synthesize the conversation with the user and identify the inputText that 
       satisfies the inputPrompt so the function is able to return the desired output for
       the user.
+
+      If it appears the user is chatting about something irrelevant to the input prompt, 
+      then please cordially guide the user back to the input prompt with a chatResponse.
     `,
     JSONOutputExamples: [
       {inputText: 'highlands ranch, cardboard boxes'},
       {inputText: 'the user wants to find scissors at the highlands ranch home depot'},
       {inputText: 'the user is looking for hat channel at the jefferson county location'},
       {inputText: 'r13 insulation, arvada'},
+      {chatResponse: "I'm only able to chat about <XYZ>. <paraphrase the inputPrompt>"}
     ],
     messages
   })
+  if (response.chatResponse) return sendMessageToUser(response.chatResponse, action.id)
   const { default: runAction } = action
   await runAction(response.inputText)
 }
