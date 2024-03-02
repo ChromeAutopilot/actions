@@ -10,11 +10,10 @@ import {
   getDOMSnapshot,
   waitForElement,
   sleep,
-  sendMessageToUser
 } from 'https://chromeautopilot.com/sdk-1.0.0.js'
 // } from 'http://localhost:3000/sdk-1.0.0.js'
 
-export const extensionVersion = '0.0.16'
+export const extensionVersion = '0.0.17'
 export const id = 'locateItemInHomeDepot'
 export const name = 'Locate Item in Home Depot'
 export const description = 'Find the aisle and bay of a product in your local Home Depot'
@@ -87,7 +86,7 @@ export default async function locateItemInHomeDepot(inputText) {
     await navigateTo(url)
     dom = await getDOMSnapshot()
     const itemLocation = dom.getElementByText('span', 'Aisle').innerText
-    return sendMessageToUser(`"${itemName}" is not in stock at ${store}, but it is in stock at ${nearbyStoreName}:\n\n**${itemLocation}**`, id)
+    return `"${itemName}" is not in stock at ${store}, but it is in stock at ${nearbyStoreName}:\n\n**${itemLocation}**`
   }  
   const itemLocation = dom.getElementByText('span', 'Aisle').innerText
   await closeTab()
